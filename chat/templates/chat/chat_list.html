@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+    .chat-list-container {
+        max-width: 600px;
+        margin: 40px auto;
+        background: #fff;
+        border-radius: 10px;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+    }
+
+    .chat-list-header {
+        background: linear-gradient(90deg, #007bff, #00c6ff);
+        color: #fff;
+        padding: 20px;
+        font-size: 1.4em;
+        font-weight: 600;
+        text-align: center;
+    }
+
+    .user-list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    .user-list li {
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    .user-list li:last-child {
+        border-bottom: none;
+    }
+
+    .user-list a {
+        display: block;
+        padding: 15px 20px;
+        color: #333;
+        text-decoration: none;
+        transition: background 0.2s, transform 0.1s;
+    }
+
+    .user-list a:hover {
+        background: #f4f8fb;
+        transform: translateX(5px);
+    }
+
+    .user-list a::before {
+        content: "💬 ";
+        margin-right: 8px;
+    }
+</style>
+
+<div class="chat-list-container">
+    <div class="chat-list-header">Select a user to chat with</div>
+    <ul class="user-list">
+        {% for user in users %}
+        <li>
+            <a href="{% url 'chat_view' last_name=user.last_name %}">
+                {{ user.first_name }} {{ user.last_name }} ({{ user.email }})
+            </a>
+        </li>
+        {% empty %}
+        <li style="padding: 15px 20px; color: #888;">No other users found.</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

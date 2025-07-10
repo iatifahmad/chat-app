@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Sign Up</title>
+    <style>
+        body {
+            background: linear-gradient(to bottom right, #6fb1fc, #d0eaff);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        .signup-card {
+            background: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            width: 340px;
+            text-align: center;
+        }
+
+        .signup-card h1 {
+            margin-bottom: 20px;
+            color: #007bff;
+            font-size: 1.8em;
+        }
+
+        .signup-card form {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .signup-card input[type="text"],
+        .signup-card input[type="email"],
+        .signup-card input[type="password"] {
+            padding: 10px 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 1em;
+        }
+
+        .signup-card button {
+            padding: 10px;
+            background: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .signup-card button:hover {
+            background: #0056b3;
+        }
+
+        .signup-card .helptext {
+            font-size: 0.85em;
+            color: #777;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="signup-card">
+        <h1>Sign Up</h1>
+        <form method="post" action="{% url 'account_signup' %}">
+            {% csrf_token %}
+            {{ form.email.label_tag }}
+            {{ form.email }}
+
+            {{ form.first_name.label_tag }}
+            {{ form.first_name }}
+
+            {{ form.last_name.label_tag }}
+            {{ form.last_name }}
+
+            {{ form.password1.label_tag }}
+            {{ form.password1 }}
+
+            {{ form.password2.label_tag }}
+            {{ form.password2 }}
+
+            <button type="submit">Create Account</button>
+        </form>
+    </div>
+</body>
+
+</html>

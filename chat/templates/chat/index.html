@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: "Segoe UI", Tahoma, sans-serif;
+        background: linear-gradient(135deg, #6BB0FF 0%, #FFE89B 100%);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .hero {
+        background: white;
+        max-width: 500px;
+        width: 100%;
+        text-align: center;
+        border-radius: 12px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    }
+
+    .hero h1 {
+        color: #0056b3;
+        margin-bottom: 16px;
+    }
+
+    .hero p {
+        color: #333;
+        margin-bottom: 24px;
+        line-height: 1.5;
+    }
+
+    .hero button {
+        background: #007bff;
+        color: white;
+        border: none;
+        padding: 12px 28px;
+        font-size: 1.1em;
+        border-radius: 24px;
+        cursor: pointer;
+        transition: background 0.2s;
+    }
+
+    .hero button:hover {
+        background: #0056b3;
+    }
+
+    .hero a {
+        color: #007bff;
+        text-decoration: none;
+    }
+
+    .hero a:hover {
+        text-decoration: underline;
+    }
+</style>
+
+<div class="hero">
+    <h1>Welcome to ChatApp</h1>
+    {% if user.is_authenticated %}
+    <p>Hi {{ user.first_name|default:user.email }} 👋<br>Ready to start chatting?</p>
+    <button onclick="window.location.href='{% url 'chat_list' %}'">Go to Chat</button>
+    {% else %}
+    <p>Connect with friends in real time — secure, simple, and fast.</p>
+    <button onclick="window.location.href='{% url 'account_login' %}'">Log In</button>
+    <p style="margin-top: 16px;">
+        New here? <a href="{% url 'account_signup' %}">Sign Up Now</a>
+    </p>
+    {% endif %}
+</div>
+{% endblock %}

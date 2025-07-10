@@ -1,0 +1,162 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<style>
+    body {
+        background: #e5ddd5;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .chat-container {
+        max-width: 600px;
+        margin: 40px auto;
+        background: #ffffff;
+        border-radius: 8px;
+        display: flex;
+        flex-direction: column;
+        height: 80vh;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .chat-header {
+        padding: 16px 24px;
+        background: #075e54;
+        color: #fff;
+        font-weight: bold;
+        font-size: 1.1em;
+        border-radius: 8px 8px 0 0;
+    }
+
+    .chat-log {
+        flex: 1;
+        padding: 16px;
+        overflow-y: auto;
+        background: url("{% static 'chat/chatbg.png' %}");        /* subtle bg */
+        background-size: cover;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .chat-message {
+        display: inline-block;
+        max-width: 70%;
+        padding: 10px 14px;
+        border-radius: 16px;
+        background: #ece5dd;
+        word-break: break-word;
+        align-self: flex-start;
+    }
+
+    .chat-message.me {
+        background: #dcf8c6;
+        align-self: flex-end;
+    }
+
+    .chat-sender {
+        font-size: 0.85em;
+        font-weight: 500;
+        margin-bottom: 2px;
+        color: #075e54;
+    }
+
+    .chat-message.me .chat-sender {
+        color: #34b7f1;
+    }
+
+    .chat-input-area {
+        display: flex;
+        padding: 10px 16px;
+        border-top: 1px solid #ddd;
+        background: #f0f0f0;
+        border-radius: 0 0 8px 8px;
+    }
+
+    #chat-message-input {
+        flex: 1;
+        padding: 10px 14px;
+        border: 1px solid #ccc;
+        border-radius: 20px;
+        font-size: 1em;
+        outline: none;
+        margin-right: 8px;
+        background: #fff;
+    }
+
+    #chat-message-input:focus {
+        border-color: #34b7f1;
+    }
+
+    #chat-message-submit {
+        background: #075e54;
+        color: #fff;
+        border: none;
+        border-radius: 20px;
+        padding: 8px 16px;
+        font-size: 1em;
+        cursor: pointer;
+        transition: background 0.2s;
+    }
+
+    #chat-message-submit:hover {
+        background: #0b7a66;
+    }
+</style>
+
+<div class="chat-container">
+    <div class="chat-header">
+        Chatting with {{ other_user.email }}
+    </div>
+    <div id="chat-log" class="chat-log"></div>
+    <div class="chat-input-area">
+        <input id="chat-message-input" type="text" placeholder="Type your message..." autocomplete="off" />
+        <button id="chat-message-submit">Send</button>
+    </div>
+</div>
+
+<script>
+    const currentUser = "{{ request.user.email }}";
+    const socket = new WebSocket(
+        'ws://' + window.location.host + '/ws/chat/{{ other_user.email }}/'
+    );
+
+    function addMessage(sender, message) {
+        const log = document.getElementById('chat-log');
+        const msgDiv = document.createElement('div');
+        msgDiv.classList.add('chat-message');
+        if (sender === currentUser) {
+            msgDiv.classList.add('me');
+        }
+        const senderDiv = document.createElement('div');
+        senderDiv.classList.add('chat-sender');
+        senderDiv.textContent = sender === currentUser ? "You" : sender;
+        msgDiv.appendChild(senderDiv);
+
+        const textDiv = document.createElement('div');
+        textDiv.textContent = message;
+        msgDiv.appendChild(textDiv);
+
+        log.appendChild(msgDiv);
+        log.scrollTop = log.scrollHeight;
+    }
+
+    socket.onmessage = function (e) {
+        const data = JSON.parse(e.data);
+        addMessage(data.sender, data.message);
+    };
+
+    document.getElementById('chat-message-submit').onclick = function (e) {
+        const messageInputDom = document.getElementById('chat-message-input');
+        const message = messageInputDom.value.trim();
+        if (message.length === 0) return;
+        socket.send(JSON.stringify({ 'message': message }));
+        messageInputDom.value = '';
+    };
+
+    document.getElementById('chat-message-input').addEventListener('keyup', function (e) {
+        if (e.key === 'Enter') {
+            document.getElementById('chat-message-submit').click();
+        }
+    });
+</script>
+{% endblock %}
