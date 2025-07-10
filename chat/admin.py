@@ -5,19 +5,19 @@ from .models import User, Message
 
 class UserAdmin(BaseUserAdmin):
     model = User
-    list_display = ('email', 'first_name', 'last_name', 'number', 'is_staff')
+    list_display = ('email', 'first_name', 'last_name', 'is_staff')
     list_filter = ('is_staff', 'is_superuser', 'is_active')
     ordering = ('email',)
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
-        ('Personal Info', {'fields': ('first_name', 'last_name', 'number')}),
+        ('Personal Info', {'fields': ('first_name', 'last_name', )}),
         ('Permissions', {'fields': ('is_staff', 'is_superuser', 'groups', 'user_permissions')}),
         ('Important dates', {'fields': ('last_login', 'date_joined')}),
     )
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('email', 'first_name', 'last_name', 'number', 'password1', 'password2', 'is_staff', 'is_superuser')}
+            'fields': ('email', 'first_name', 'last_name', 'password1', 'password2', 'is_staff', 'is_superuser')}
         ),
     )
 

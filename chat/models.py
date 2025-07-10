@@ -17,8 +17,6 @@ class UserManager(BaseUserManager):
         user = self.model(email=self.normalize_email(email))
         user.first_name = first_name
         user.last_name = last_name
-        if number is not None:
-            user.number = number
         user.set_password(password)
         user.is_staff = is_staff
         user.is_superuser = is_superuser
@@ -34,7 +32,6 @@ class User(AbstractUser):
     last_name = models.CharField(max_length=100)
     email = models.EmailField(unique=True) 
     password =models.CharField(max_length=100)
-    number = models.IntegerField(blank=True, null=True)  # <-- new field added
     username = None
     objects = UserManager()
     USERNAME_FIELD = "email"
