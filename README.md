@@ -19,12 +19,10 @@ A modern real-time chat application built with **Django**, **Django Channels**, 
 ### 1️⃣ Clone the repository
 
 ```bash
-git clone [https://github.com/yourusername/chatapp.git](https://github.com/yourusername/chatapp.git)
+git clone [https://github.com/iatifahmad/chat-app](https://github.com/iatifahmad/chat-app))
 cd chatapp
 python -m venv venv
 venv\Scripts\activate
 pip install -r requirements.txt
 python manage.py migrate
-# run with Daphne (for real ASGI + WebSockets)
-```bash
 daphne chat_project.asgi:application
